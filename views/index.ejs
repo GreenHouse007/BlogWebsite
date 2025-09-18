@@ -1,0 +1,42 @@
+<div class="author">
+  <h1 class="author__heading">Hello, I'm Developer.</h1>
+  <p class="author__body">
+    I'm a web developer specializing in building (and occasionally designing)
+    exceptional digital experiences. Currently, I'm focused on building
+    responsive full-stack web applications.
+  </p>
+</div>
+
+<img src="/img/Tree.png" alt="Codding Tree" />
+
+<section class="articles">
+  <h2 class="articles__heading">Latest Posts</h2>
+
+  <!-- Dummy data display until we include posts later on -->
+  <ul class="article-ul">
+    <% data.forEach(post => { %>
+    <li>
+      <a href="/post/<%= post._id %>">
+        <span><%- post.title %></span>
+        <span class="article-list__date"
+          ><% post.createdAt.toDateString() %>
+        </span>
+      </a>
+    </li>
+    <%}); %>
+  </ul>
+
+  <div class="pagination-container">
+    <% if (nextPage !== null) { %>
+    <a href="/?page=<%= nextPage %>" class="pagination pagination--older"
+      >&lt; View Older Posts</a
+    >
+    <% } %> <% if (prevPage >= 1) { %> <% if (prevPage === 1) { %>
+    <a href="/" class="pagination pagination--newer">View Newer Posts &gt;</a>
+    <% } else { %>
+    <a href="/?page=<%= prevPage %>" class="pagination pagination--newer"
+      >View Newer Posts &gt;</a
+    >
+    <% } %> <% } %>
+  </div>
+</section>

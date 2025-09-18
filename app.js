@@ -8,6 +8,9 @@ const PORT = 4000;
 const connectDB = require("./server/config/db");
 connectDB();
 
+//update dummy data
+//const insertPostData = require("./server/routes/dummydate");
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
