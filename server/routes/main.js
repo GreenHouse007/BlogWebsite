@@ -11,15 +11,17 @@ router.get("/", async (req, res) => {
     };
 
     let perPage = 3;
-    let page = req.query.page || 1;
+    let page = Math.max(parseInt(req.query.page) || 1, 1);
 
-    const data = await Post.aggregate([{ $sort: { title: -1 } }])
-      .skip(perPage * page - perPage)
-      .limit(perPage)
-      .exec();
+    const [data, count] = await Promise.all([
+      Post.find()
+        .sort({ createdAt: -1 }) // <-- sort by newest
+        .skip(perPage * (page - 1))
+        .limit(perPage),
+      Post.countDocuments({}),
+    ]);
 
-    const count = await Post.countDocuments({});
-    const nextPage = parseInt(page) + 1;
+    const nextPage = page + 1;
     const hasNextPage = nextPage <= Math.ceil(count / perPage);
 
     res.render("index", {
@@ -83,7 +85,7 @@ router.post("/search", async (req, res) => {
         { title: { $regex: new RegExp(searchNoSpecialChar, "i") } },
         { body: { $regex: new RegExp(searchNoSpecialChar, "i") } },
       ],
-    });
+    }).sort({ createdAt: -1 });
     res.render("search", { locals, data });
   } catch (error) {
     console.log(error);
